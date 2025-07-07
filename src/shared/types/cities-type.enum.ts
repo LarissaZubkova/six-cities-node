@@ -3,6 +3,6 @@ export enum CitiesType {
     Cologne = 'Cologne',
     Brussels = 'Brussels',
     Amsterdam = 'Amsterdam',
-    Hamburg = "Hamburg",
+    Hamburg = 'Hamburg',
     Dusseldorf = 'Dusseldorf',
 }
