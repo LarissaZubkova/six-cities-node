@@ -1,5 +1,5 @@
 export {
   generateRandomValue,
   getRandomItems,
-  getRandomItem
+  getRandomItem,
 } from './common.js';
