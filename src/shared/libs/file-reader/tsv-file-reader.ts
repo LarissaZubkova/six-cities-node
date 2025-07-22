@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/offer.type.js';
+import { OfferType } from '../../types/offer.type.js';
 import { CitiesType } from '../../types/cities-type.enum.js';
 import { Amenity } from '../../types/amenity.type.js';
 import { User } from '../../types/user.type.js';
+import { TypesType } from '../../types/types-type.enum.js';
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -18,14 +19,14 @@ export class TSVFileReader implements FileReader {
     }
   }
 
-  private parseRawDataToOffers(): Offer[] {
+  private parseRawDataToOffers(): OfferType[] {
     return this.rawData
       .split('\n')
       .filter((row) => row.trim().length > 0)
       .map((line) => this.parseLineToOffer(line));
   }
 
-  private parseLineToOffer(line: string): Offer {
+  private parseLineToOffer(line: string): OfferType {
     const [
       title,
       description,
@@ -36,15 +37,18 @@ export class TSVFileReader implements FileReader {
       isPremium,
       isFavorite,
       rating,
+      type,
       rooms,
+      guests,
       price,
       amenities,
-      email,
-      avatarPath,
       name,
       userType,
+      email,
+      avatarPath,
       comments,
-      coordinates,
+      latitude,
+      longitude,
     ] = line.split('\t');
 
     return {
@@ -57,21 +61,19 @@ export class TSVFileReader implements FileReader {
       isPremium: this.parseBoolean(isPremium),
       isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseStringToNumber(rating),
+      type: TypesType[type as 'Paris', 'Apartment', 'House','Room', 'Hotel'],
       rooms: this.parseStringToNumber(rooms),
+      guests: this.parseStringToNumber(guests),
       price: this.parseStringToNumber(price),
       amenities: this.parseStringToArray(amenities) as Amenity[],
-      user: this.parseUser(email, avatarPath, name, userType as 'simple' | 'pro'),
+      user: this.parseUser(name, userType as 'simple' | 'pro', email, avatarPath),
       comments: this.parseStringToNumber(comments),
-      coordinates: {latitude: this.parseCoordinates(coordinates)[0], longitude:  this.parseCoordinates(coordinates)[1]}
+      coordinates: {latitude: this.parseStringToNumber(latitude), longitude:  this.parseStringToNumber(longitude)}
     };
   }
 
-  private parseCoordinates(coordinates: string): number[] {
-    return coordinates.split(',').map((coordinate) => Number(coordinate));
-  }
-
-  private parseUser(email: string, avatarPath: string, name: string, userType: 'simple' | 'pro'): User {
-    return {email, avatarPath, name, userType};
+  private parseUser(name: string, userType: 'simple' | 'pro', email: string, avatarPath: string,): User {
+    return {name, userType, email, avatarPath};
   }
 
   private parseStringToNumber(value: string): number {
@@ -90,7 +92,7 @@ export class TSVFileReader implements FileReader {
     this.rawData = readFileSync(this.filename, 'utf-8');
   }
 
-  public toArray(): Offer[] {
+  public toArray(): OfferType[] {
     this.validateRawData();
     return this.parseRawDataToOffers();
   }

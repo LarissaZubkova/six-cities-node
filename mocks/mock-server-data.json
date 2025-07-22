@@ -80,7 +80,7 @@
       "Рокки Бальбоа",
       "Джон Смит"
     ],
-    "isPro": [true, false],
+    "userType": ["simple" , "pro"],
     "emails": [
       "snow@pisem.local",
       "president@dka.local",

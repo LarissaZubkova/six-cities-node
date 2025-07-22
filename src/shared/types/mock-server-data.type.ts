@@ -10,7 +10,7 @@ export type MockServerData = {
   types: string[];
   goods: string[];
   users: string[];
-  isPro: boolean[];
+  userType: string[];
   emails: string[];
   avatars: string[];
   locations: {latitude: number; longitude: number}[];
