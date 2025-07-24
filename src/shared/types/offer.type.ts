@@ -1,8 +1,9 @@
 import { Amenity } from './amenity.type.js';
 import { CitiesType } from './cities-type.enum.js';
+import { TypesType } from './types-type.enum.js';
 import { User } from './user.type.js';
 
-export type Offer = {
+export type OfferType = {
     title: string;
     description: string;
     postDate: Date;
@@ -12,7 +13,9 @@ export type Offer = {
     isPremium: boolean;
     isFavorite: boolean;
     rating: number;
+    type: TypesType;
     rooms: number;
+    guests: number;
     price: number;
     amenities: Amenity[];
     user: User;
