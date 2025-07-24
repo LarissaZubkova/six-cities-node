@@ -5,27 +5,15 @@ import { Amenity } from '../../types/amenity.type.js';
 import { User } from '../../types/user.type.js';
 import { TypesType } from '../../types/types-type.enum.js';
 import EventEmitter from 'node:events';
+import { createReadStream } from 'node:fs';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
-  private rawData = '';
+  private CHUNK_SIZE = 16384; // 16KB
 
   constructor(
         private readonly filename: string
   ) {
     super();
-  }
-
-  private validateRawData(): void {
-    if (!this.rawData) {
-      throw new Error('File was not read');
-    }
-  }
-
-  private parseRawDataToOffers(): OfferType[] {
-    return this.rawData
-      .split('\n')
-      .filter((row) => row.trim().length > 0)
-      .map((line) => this.parseLineToOffer(line));
   }
 
   private parseLineToOffer(line: string): OfferType {
@@ -90,12 +78,29 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     return value.split(';');
   }
 
-  public read(): void {
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
 
-  }
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
 
-  public toArray(): OfferType[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        const parsedOffer = this.parseLineToOffer(completeRow);
+        this.emit('line', parsedOffer);
+      }
+    }
+
+    this.emit('end', importedRowCount);
   }
 }
