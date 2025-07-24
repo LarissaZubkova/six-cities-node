@@ -58,7 +58,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       amenities: this.parseStringToArray(amenities) as Amenity[],
       user: this.parseUser(name, userType as 'simple' | 'pro', email, avatarPath),
       comments: this.parseStringToNumber(comments),
-      coordinates: {latitude: this.parseStringToNumber(latitude), longitude:  this.parseStringToNumber(longitude)}
+      coordinates: {latitude: Number(latitude), longitude:  Number(longitude)}
     };
   }
 

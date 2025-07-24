@@ -14,6 +14,9 @@ const MAX_GUESTS = 10;
 const MIN_RATING = 1;
 const MAX_RATING = 5;
 
+const MIN_COMMENTS = 1;
+const MAX_COMMENTS = 100;
+
 const INTEGER = 1;
 
 export class TSVOfferGenerator implements OfferGenerator {
@@ -39,6 +42,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     const userType = getRandomItem<string>(this.mockData.userType);
     const email = getRandomItem<string>(this.mockData.emails);
     const avatar = getRandomItem(this.mockData.avatars);
+    const comments = generateRandomValue(MIN_COMMENTS, MAX_COMMENTS);
     const locations = getRandomItem(this.mockData.locations);
 
     const {latitude, longitude} = locations;
@@ -46,7 +50,7 @@ export class TSVOfferGenerator implements OfferGenerator {
     return [
       title, description, postDate, city, previewImage, images,
       isPremium, isFavorite, rating, type, rooms, guests,
-      coast, goods, user, userType, email, avatar, latitude, longitude
+      coast, goods, user, userType, email, avatar, comments, latitude, longitude
     ].join('\t');
   }
 }
