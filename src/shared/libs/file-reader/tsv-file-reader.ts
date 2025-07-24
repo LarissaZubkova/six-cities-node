@@ -4,13 +4,16 @@ import { CitiesType } from '../../types/cities-type.enum.js';
 import { Amenity } from '../../types/amenity.type.js';
 import { User } from '../../types/user.type.js';
 import { TypesType } from '../../types/types-type.enum.js';
+import EventEmitter from 'node:events';
 
-export class TSVFileReader implements FileReader {
+export class TSVFileReader extends EventEmitter implements FileReader {
   private rawData = '';
 
   constructor(
         private readonly filename: string
-  ) {}
+  ) {
+    super();
+  }
 
   private validateRawData(): void {
     if (!this.rawData) {
