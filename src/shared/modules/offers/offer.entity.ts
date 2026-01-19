@@ -1,4 +1,4 @@
-import { defaultClasses, modelOptions, prop, Ref } from '@typegoose/typegoose';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { Amenity, CitiesType, TypesType, AmenityEnum } from '../../types/index.js';
 import { UserEntity } from '../users/user.entity.js';
 
@@ -80,3 +80,5 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true})
   public coordinates: {latitude: number, longitude: number};
 }
+
+export const OfferModel = getModelForClass(OfferEntity);
