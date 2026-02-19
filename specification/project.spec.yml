@@ -7,3 +7,10 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   version: "1.0.0"
+tags:
+  - name: offers
+    description: Действия с объявлениями
+  - name: comments
+    description: Действия с коментариями
+  - name: users
+    description: Днйствия с пользователями
