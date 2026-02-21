@@ -23,6 +23,24 @@ paths:
       summary: Регистрация пользователя
       description: Регистрирует нового пользователя
 
+      requestBody:
+        description: Информация для создания нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "409":
+          description: Пользователь с таким email уже существует
+
   /users/login:
     post:
       tags:
@@ -30,11 +48,47 @@ paths:
       summary: Авторизация пользователя
       description: Авторизует пользователя на основе логина и пароля
 
+      requestBody:
+        description: Информация для авторизации пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь авторизован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        "409":
+          description: Пользователь с таким email не найден
+
     get:
       tags:
         - users
       summary: Проверка состояния пользователя
       description: Возвращает информацию по авторизованному пользователю
+
+      requestBody:
+        description: Информация по авторизованному пользователю
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь найден. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userInfo'
+        "409":
+          description: Пользователь с таким email не найден
 
   /users/{userId}/avatar:
     post:
@@ -43,3 +97,103 @@ paths:
       summary: Загрузить изображение аватара
       description: Загружает изображение аватара пользователя. Изображение
         аватара должно быть в формате 'png' или 'jpg'
+
+      requestBody:
+        description: Изображение аватара
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userAvatar'
+        required: true
+
+      responses:
+        "201":
+          description: Изображение аватара загружено.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userInfo'
+        "409":
+          description: Пользователь с таким id не найден
+
+components:
+  schemas:
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+
+        name:
+          type: string
+          example: Tom
+
+        userType:
+          type: string
+          example: simple | pro
+
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+    loginUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+
+        password:
+          type: string
+          example: 123456
+
+    userInfo:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: test@mail.ru
+
+        userType:
+          type: string
+          example: simple | pro
+
+        name:
+          type: string
+          example: Tom
+
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        password:
+          type: string
+          example: 123456
+
+        avatarPath:
+          type: string
+          example: /photos/photo.jpg
+
+    userAvatar:
+      type: string
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
