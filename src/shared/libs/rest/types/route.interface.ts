@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
 import { HttpMethod } from '../index.js';
 
-export interface Rout {
+export interface Route {
   path: string;
   method: HttpMethod;
   handler: (req: Request, res: Response, next: NextFunction) => void;

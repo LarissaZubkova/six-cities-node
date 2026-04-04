@@ -1,2 +1,3 @@
 export { HttpMethod } from './types/http-method.enum.js';
-export { Rout } from './types/rout.interface.js';
+export { Route } from './types/route.interface.js';
+export { Controller } from './controller/controller.interface.js';
