@@ -1,0 +1,8 @@
+import { NextFunction, Response, Request } from 'express';
+import { HttpMethod } from '../index.js';
+
+export interface Rout {
+  path: string;
+  method: HttpMethod;
+  handler: (req: Request, res: Response, next: NextFunction) => void;
+}
