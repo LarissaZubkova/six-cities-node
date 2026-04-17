@@ -4,7 +4,8 @@ import { Component } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
-import { OfferService, ParamOfferId } from './index.js';
+import { OfferRdo, OfferService, ParamOfferId } from './index.js';
+import { fillDTO } from '../../helpers/index.js';
 
 @injectable()
 export default class OfferController extends BaseController {
@@ -30,6 +31,6 @@ export default class OfferController extends BaseController {
       );
     }
 
-    this.ok(res, offer);
+    this.ok(res, fillDTO(OfferRdo, offer));
   }
 }

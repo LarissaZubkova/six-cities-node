@@ -6,3 +6,4 @@ export { createOfferContainer } from './offer.container.js';
 export { OfferService } from './offer-service.interface.js';
 export { DEFAULT_OFFER_COUNT } from './offer.constant.js';
 export { ParamOfferId } from './type/param-offerid.type.js';
+export { OfferRdo } from './rdo/offer.rdo.js';
