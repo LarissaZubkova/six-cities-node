@@ -33,3 +33,8 @@ Content-Type: application/json
 }
 
 ###
+
+# Получить объявление по идентификатору
+DELETE  http://localhost:5000/offers/69e2850562ba110c41f87657 HTTP/1.1
+
+###

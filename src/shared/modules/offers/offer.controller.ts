@@ -19,6 +19,7 @@ export default class OfferController extends BaseController {
     this.addRoute({path: '/:offerId', method: HttpMethod.Get, handler: this.show});
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.delete});
   }
 
   public async show({params}: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -36,14 +37,29 @@ export default class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
-  public async index (_req: Request, res: Response): Promise<void> {
+  public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  public async create ({ body }: CreateOfferRequest, res: Response): Promise<void> {
+  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
     const result = await this.offerService.create(body);
     const offer = await this.offerService.findById(result.id);
     this.created(res, fillDTO(OfferRdo, offer));
+  }
+
+  public async delete({params}: Request<ParamOfferId>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const offer = await this.offerService.deleteById(offerId);
+
+    if(!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id${offerId} not found`,
+        'OfferController'
+      );
+    }
+
+    this.noContent(res, offer);
   }
 }
