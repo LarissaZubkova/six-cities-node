@@ -4,7 +4,7 @@ import { Component } from '../../types/component.enum.js';
 import { Logger } from '../../libs/logger/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
-import { CreateOfferRequest, OfferRdo, OfferService, ParamOfferId } from './index.js';
+import { CreateOfferRequest, OfferRdo, OfferService, ParamOfferId, UpdateOfferDto } from './index.js';
 import { fillDTO } from '../../helpers/index.js';
 
 @injectable()
@@ -20,6 +20,7 @@ export default class OfferController extends BaseController {
     this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
     this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.delete});
+    this.addRoute({path: '/:offerId', method: HttpMethod.Patch, handler: this.update});
   }
 
   public async show({params}: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -61,5 +62,20 @@ export default class OfferController extends BaseController {
     }
 
     this.noContent(res, offer);
+  }
+
+  public async update({body, params}: Request<ParamOfferId, unknown, UpdateOfferDto>, res: Response): Promise<void> {
+    const { offerId } = params;
+    const offer = await this.offerService.updateById(offerId, body);
+
+    if(!offer) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id${offerId} not found`,
+        'OfferController'
+      );
+    }
+
+    this.noContent(res, fillDTO(OfferRdo, offer));
   }
 }
