@@ -1,9 +1,35 @@
 # Получить объявление по идентификатору
-GET http://localhost:5000/offers/696fd42fe7f4c1fee989e783 HTTP/1.1
+GET http://localhost:5000/offers/69e2850562ba110c41f87657 HTTP/1.1
 
 ###
 
 # Получить список объявлений
 GET http://localhost:5000/offers HTTP/1.1
+
+###
+
+# Создать объявление
+POST  http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Жилье красивое",
+  "description": "Очень уютно и красиво, дешево и сердито",
+  "postDate": "2022-05-12T11:56:37.573Z",
+  "city": "Paris",
+  "previewImage": "billy-summers.png",
+  "images": ["billy-summers.png"],
+  "isPremium": true,
+  "isFavorite": true,
+  "rating": 5,
+  "type": "Apartment",
+  "rooms": 4,
+  "guests": 4,
+  "price": 4000,
+  "amenities": ["Breakfast"],
+  "userId": "696fd4ae43e9ccc256626550",
+  "comments": 5,
+  "coordinates": {"latitude": 45.9876, "longitude": 44.7765}
+}
 
 ###
