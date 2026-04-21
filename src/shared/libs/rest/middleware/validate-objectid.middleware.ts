@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 export class ValidateObjectIdMiddleware implements Middleware {
   constructor(private param: string) {}
 
-  public execute({params}: Request, res: Response, next: NextFunction): void {
+  public execute({params}: Request, _res: Response, next: NextFunction): void {
     const objectId = params[this.param];
 
     if (Types.ObjectId.isValid(objectId)) {

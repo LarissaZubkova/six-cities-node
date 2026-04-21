@@ -18,7 +18,7 @@ export class DefaultCommentService implements CommentService {
     return this.commentModel.find({offerId}).populate('userId');
   }
 
-  public async deleteByOfferId(offerId: string): Promise<number | null> {
+  public async deleteByOfferId(offerId: string): Promise<number> {
     const result = await this.commentModel.deleteMany({offerId}).exec();
     return result.deletedCount;
   }
