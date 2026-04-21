@@ -7,6 +7,7 @@ import { Request, Response } from 'express';
 import { CreateOfferRequest, OfferRdo, OfferService, ParamOfferId, UpdateOfferDto } from './index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { CommentRdo, CommentService } from '../comment/index.js';
+import { DEFAULT_PREMIUM_OFFER_COUNT } from './offer.constant.js';
 
 @injectable()
 export default class OfferController extends BaseController {
@@ -24,6 +25,7 @@ export default class OfferController extends BaseController {
     this.addRoute({path: '/:offerId', method: HttpMethod.Delete, handler: this.delete, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
     this.addRoute({path: '/:offerId', method: HttpMethod.Patch, handler: this.update, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
     this.addRoute({path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getComments, middlewares: [new ValidateObjectIdMiddleware('offerId')]});
+    this.addRoute({path: '/bundles/premium', method: HttpMethod.Get, handler: this.getPremium});
   }
 
   public async show({params}: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -95,5 +97,10 @@ export default class OfferController extends BaseController {
 
     const comments = await this.commentService.findByOfferId(offerId);
     this.ok(res, fillDTO(CommentRdo, comments));
+  }
+
+  public async getPremium(_req: Request, res: Response): Promise<void> {
+    const offers = await this.offerService.findPremium(DEFAULT_PREMIUM_OFFER_COUNT);
+    this.ok(res, fillDTO(OfferRdo, offers));
   }
 }
