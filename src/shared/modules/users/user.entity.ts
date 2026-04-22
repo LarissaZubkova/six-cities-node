@@ -1,5 +1,5 @@
 import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { User } from '../../types/index.js';
+import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -21,7 +21,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   public email: string;
 
   @prop({required: true})
-  public userType: 'simple' | 'pro';
+  public userType: UserType;
 
   @prop({required: false, default: ''})
   public avatarPath: string;
