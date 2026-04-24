@@ -3,7 +3,7 @@ import { BaseController, HttpError, HttpMethod, ValidateDtoMiddleware } from '..
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Response } from 'express';
-import { CreateUserDto, CreateUserRequest, LoginUserRequest, UserRdo, UserService } from './index.js';
+import { CreateUserDto, CreateUserRequest, LoginUserDto, LoginUserRequest, UserRdo, UserService } from './index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
@@ -19,7 +19,7 @@ export class UserController extends BaseController {
     this.logger.info('Register routes for UserController ...');
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create, middlewares: [new ValidateDtoMiddleware(CreateUserDto)]});
-    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
+    this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)] });
   }
 
   public async create (

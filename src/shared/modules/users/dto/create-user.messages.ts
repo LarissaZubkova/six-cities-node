@@ -10,10 +10,10 @@ export const CreateUserValidationMessage = {
     lengthField: 'Min length is 1 max is 15'
   },
   password: {
-    invalidFormat: 'Name is required',
+    invalidFormat: 'Password is required',
     lengthField: 'Min length is 6 max is 12',
   },
   userType: {
     invalidFormat: 'UserType must be simple or pro',
   },
-};
+} as const;
