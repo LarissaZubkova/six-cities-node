@@ -1,3 +1,4 @@
+export { CreateOfferValidationMessage } from './dto/create-offer.messages.js';
 export { OfferEntity, OfferModel } from './offer.entity.js';
 export { CreateOfferDto } from './dto/create-offer.dto.js';
 export { UpdateOfferDto } from './dto/update-offer.dto.js';
@@ -5,3 +6,6 @@ export { DefaultOfferService } from './default-offer.service.js';
 export { createOfferContainer } from './offer.container.js';
 export { OfferService } from './offer-service.interface.js';
 export { DEFAULT_OFFER_COUNT } from './offer.constant.js';
+export { ParamOfferId } from './type/param-offerid.type.js';
+export { OfferRdo } from './rdo/offer.rdo.js';
+export { CreateOfferRequest } from './type/create-offer-request.type.js';
