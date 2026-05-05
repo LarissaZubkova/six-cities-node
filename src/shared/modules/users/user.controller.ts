@@ -3,10 +3,11 @@ import { BaseController, HttpError, HttpMethod, UploadFileMiddleware, ValidateDt
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Response, Request } from 'express';
-import { CreateUserDto, CreateUserRequest, LoginUserDto, LoginUserRequest, UserRdo, UserService } from './index.js';
+import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUserRequest, UserRdo, UserService } from './index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
+import { AuthService } from '../auth/intex.js';
 
 injectable();
 export class UserController extends BaseController {
@@ -14,6 +15,7 @@ export class UserController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
+    @inject(Component.AuthService) private readonly authService: AuthService,
   ) {
     super(logger);
     this.logger.info('Register routes for UserController ...');
@@ -43,23 +45,16 @@ export class UserController extends BaseController {
 
   public async login(
     { body }: LoginUserRequest,
-    _res : Response,
+    res : Response,
   ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
+    const user = await this.authService.verify(body);
+    const token = await this.authService.authenticate(user);
+    const responseData = fillDTO(LoggedUserRdo, {
+      email: user.email,
+      token
+    });
 
-    if (!existsUser) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found`,
-        'UserController'
-      );
-    }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController'
-    );
+    this.ok(res, responseData);
   }
 
   public async uploadAvatar(req: Request, res: Response) {
