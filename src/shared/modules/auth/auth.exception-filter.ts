@@ -3,7 +3,7 @@ import { ExceptionFilter } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { Request, Response, NextFunction } from 'express';
-import { BaseUserException } from './intex.js';
+import { BaseUserException } from './index.js';
 
 @injectable()
 export class AuthExceptionFilter implements ExceptionFilter {

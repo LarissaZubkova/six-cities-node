@@ -5,7 +5,7 @@ import { Component } from './shared/types/index.js';
 import { createUserContainer } from './shared/modules/users/index.js';
 import { createOfferContainer } from './shared/modules/offers/index.js';
 import { createCommentContainer } from './shared/modules/comment/comment.continer.js';
-import { createAuthContainer } from './shared/modules/auth/intex.js';
+import { createAuthContainer } from './shared/modules/auth/index.js';
 
 async function bootstrap() {
   const appContainer = Container.merge(createRestApplicationContainer(), createUserContainer(), createOfferContainer(), createCommentContainer(), createAuthContainer());

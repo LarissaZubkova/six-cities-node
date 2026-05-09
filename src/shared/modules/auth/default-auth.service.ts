@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { AuthService, JWT_ALGORITHM, JWT_EXPIRED, TokenPayload, UserNotFoundException, UserPasswordIncorrectException } from './intex.js';
+import { AuthService, JWT_ALGORITHM, JWT_EXPIRED, TokenPayload, UserNotFoundException, UserPasswordIncorrectException } from './index.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { LoginUserDto, UserEntity, UserService } from '../users/index.js';

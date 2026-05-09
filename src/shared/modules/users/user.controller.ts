@@ -7,7 +7,7 @@ import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUse
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
-import { AuthService } from '../auth/intex.js';
+import { AuthService } from '../auth/index.js';
 
 injectable();
 export class UserController extends BaseController {
