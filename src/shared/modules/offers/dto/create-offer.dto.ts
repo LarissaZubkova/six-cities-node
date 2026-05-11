@@ -73,7 +73,6 @@ export class CreateOfferDto {
   @IsEnum(AmenityEnum, {each: true, message: CreateOfferValidationMessage.amenities.invalid})
   public amenities: Amenity[];
 
-  @IsMongoId({message: CreateOfferValidationMessage.userId.invalidFormat})
   public userId: string;
 
   @IsInt({message: CreateOfferValidationMessage.comments.invalidFormat})
