@@ -1,0 +1,13 @@
+# Комментарии
+## Создать комментарий
+
+POST http://localhost:5000/comments HTTP/1.1
+Content-Type: application/json
+
+{
+  "text": "Как обстоят дела?",
+  "offerId": "696fd382ca9fcabf49c6c187"
+  //"userId": "628a27d729c45f2bf9f67ff2"
+}
+
+###
