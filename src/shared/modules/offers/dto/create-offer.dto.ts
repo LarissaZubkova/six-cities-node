@@ -1,4 +1,4 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsInt, IsMongoId, IsNumber, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
 import { Amenity, AmenityEnum, CitiesType, TypesType } from '../../../types/index.js';
 import { CreateOfferValidationMessage } from '../index.js';
 import { Type } from 'class-transformer';
@@ -73,7 +73,6 @@ export class CreateOfferDto {
   @IsEnum(AmenityEnum, {each: true, message: CreateOfferValidationMessage.amenities.invalid})
   public amenities: Amenity[];
 
-  @IsMongoId({message: CreateOfferValidationMessage.userId.invalidFormat})
   public userId: string;
 
   @IsInt({message: CreateOfferValidationMessage.comments.invalidFormat})

@@ -10,3 +10,4 @@ export { LoginUserRequest } from './login-user-request.type.js';
 export { UserController } from './user.controller.js';
 export { UserRdo } from './rdo/user.rdo.js';
 export { LoginUserDto } from './dto/login-user.dto.js';
+export { LoggedUserRdo } from './rdo/logged-user.rdo.js';
