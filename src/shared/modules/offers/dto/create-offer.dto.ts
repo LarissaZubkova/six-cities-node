@@ -1,4 +1,4 @@
-import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsInt, IsMongoId, IsNumber, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, ArrayMinSize, IsArray, IsBoolean, IsDateString, IsEnum, IsInt, IsNumber, IsUrl, Max, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
 import { Amenity, AmenityEnum, CitiesType, TypesType } from '../../../types/index.js';
 import { CreateOfferValidationMessage } from '../index.js';
 import { Type } from 'class-transformer';
