@@ -7,7 +7,7 @@ import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import express, { Express } from 'express';
 import { Controller, ExceptionFilter, ParseTokenMiddleware } from '../shared/libs/rest/index.js';
 import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from './index.js';
-
+import cors from 'cors';
 @injectable()
 export class RestApplication {
   private readonly server: Express;
@@ -57,6 +57,7 @@ export class RestApplication {
     this.server.use(STATIC_UPLOAD_ROUTE, express.static(this.config.get('UPLOAD_DIRECTORY')));
     this.server.use(STATIC_FILES_ROUTE, express.static(this.config.get('STATIC_DIRECTORY_PATH')));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.server.use(cors());
   }
 
   private async _initExceptionFilters() {
