@@ -3,7 +3,7 @@ import { BaseController, HttpError, HttpMethod, UploadFileMiddleware, ValidateDt
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Response, Request } from 'express';
-import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUserRequest, UserRdo, UserService } from './index.js';
+import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUserRequest, UploadUserAvatarRdo, UserRdo, UserService } from './index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
@@ -55,10 +55,11 @@ export class UserController extends BaseController {
     this.ok(res, Object.assign(responseData, {token}));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+  public async uploadAvatar({params, file}: Request, res: Response) {
+    const {userId} = params;
+    const uploadFile = {avatarPath: file?.filename};
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, {filepath: uploadFile.avatarPath}));
   }
 
   public async checkAuthenticate({tokenPayload: {email}}: Request, res: Response) {

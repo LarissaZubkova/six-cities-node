@@ -84,5 +84,5 @@ export class UpdateOfferDto {
   @IsOptional()
   @ValidateNested({message: UpdateOfferValidationMessage.coordinates.invalidFormat})
   @Type(() => CoordinatesDto)
-  public coordinates: CoordinatesDto;
+  public coordinates?: CoordinatesDto;
 }

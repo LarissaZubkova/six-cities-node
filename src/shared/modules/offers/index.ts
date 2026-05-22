@@ -8,4 +8,5 @@ export { OfferService } from './offer-service.interface.js';
 export { DEFAULT_OFFER_COUNT } from './offer.constant.js';
 export { ParamOfferId } from './type/param-offerid.type.js';
 export { OfferRdo } from './rdo/offer.rdo.js';
+export { UploadImageRdo } from './rdo/upload-image.rdo.js';
 export { CreateOfferRequest } from './type/create-offer-request.type.js';
