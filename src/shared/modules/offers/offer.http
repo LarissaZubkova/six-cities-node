@@ -9,26 +9,27 @@ GET http://localhost:5000/offers HTTP/1.1
 ###
 
 # Создать объявление
-POST  http://localhost:5000/offers HTTP/1.1
+POST http://localhost:5000/offers
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJuYW1lIjoiSmFjayIsImlkIjoiNjlkN2Y4YTk5ODI4YTMxMTNjYTJiYjgxIiwiaWF0IjoxNzgyNTg1NzUyLCJleHAiOjE3ODI3NTg1NTJ9.V3CT5BLGIfy7pElPI37YI7Rl6XoKguix8yQvLBUBV7k
 Content-Type: application/json
 
 {
-  "title": "Жилье красивое",
-  "description": "Очень уютно и красиво, дешево и сердито",
+  "title": "Бюджетный номер в отеле бизнес-класса рядом с Кёльнским собором",
+  "description": "Тихий семейный дом в зеленой зоне с подогреваемым бассейном и фруктовым садом. Большая терраса, летняя кухня, детская площадка. Идеально для отдыха большой компанией.",
   "postDate": "2022-05-12T11:56:37.573Z",
-  "city": "Paris",
-  "previewImage": "billy-summers.png",
+  "city": "Amsterdam",
+  "previewImage": "https://ibb.co/HJkZtjv",
   "images": ["billy-summers.png"],
   "isPremium": true,
   "isFavorite": true,
   "rating": 5,
   "type": "Apartment",
-  "rooms": 4,
-  "guests": 4,
-  "price": 4000,
+  "rooms": 5,
+  "guests": 2,
+  "price": 1000,
   "amenities": ["Breakfast"],
-  "userId": "696fd4ae43e9ccc256626550",
-  "comments": 5,
+  "userId": "69d7f8a99828a3113ca2bb81",
+  "comments": 0,
   "coordinates": {"latitude": 45.9876, "longitude": 44.7765}
 }
 

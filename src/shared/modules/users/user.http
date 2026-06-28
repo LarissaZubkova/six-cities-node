@@ -26,7 +26,6 @@ Content-Type: application/json
 
 ###
 
-
 ## Отправить изображение
 
 POST http://localhost:5000/users/696fd4ae43e9ccc256626550/avatar HTTP/1.1

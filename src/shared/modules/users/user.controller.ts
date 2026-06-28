@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { BaseController, HttpError, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Response, Request } from 'express';
@@ -24,6 +24,7 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)]});
     this.addRoute({ path: '/:userId/avatar', method: HttpMethod.Post, handler: this.uploadAvatar, middlewares: [new ValidateObjectIdMiddleware('userId'), new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar')]});
     this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.checkAuthenticate});
+    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout, middlewares: [new PrivateRouteMiddleware()]});
   }
 
   public async create (
@@ -74,5 +75,13 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
+  }
+
+  public async logout(req: Request, res: Response): Promise<void> {
+    this.logger.info(`User logged out: ${req.tokenPayload?.email || 'unknown'}`);
+
+    this.ok(res, {
+      message: 'Logged out successfully'
+    });
   }
 }

@@ -5,8 +5,10 @@ import type { UserAuth, User, Offer, Comment, CommentAuth, FavoriteAuth, UserReg
 import { ApiRoute, AppRoute, HttpCode } from '../const';
 import { Token } from '../utils/utils';
 import { OfferDto } from '../dto/offer/offer.dto';
-import { adaptOffersToClient } from '../utils/adapters/adaptersToClient';
-import { adaptSignupToServer } from '../utils/adapters/adaptersToServer';
+import { adaptOffersToClient, adaptUserToClient } from '../utils/adapters/adaptersToClient';
+import { adaptCreateTicketToServer, adaptSignupToServer } from '../utils/adapters/adaptersToServer';
+import UserDto from '../dto/user/user.dto';
+import UserWithTokenDto from '../dto/user/user-with-token.dto';
 
 type Extra = {
   api: AxiosInstance;
@@ -73,7 +75,8 @@ export const postOffer = createAsyncThunk<Offer, NewOffer, { extra: Extra }>(
   Action.POST_OFFER,
   async (newOffer, { extra }) => {
     const { api, history } = extra;
-    const { data } = await api.post<Offer>(ApiRoute.Offers, newOffer);
+    const adaptedOffer = adaptCreateTicketToServer(newOffer);
+    const { data } = await api.post<Offer>(ApiRoute.Offers, adaptedOffer);
     history.push(`${AppRoute.Property}/${data.id}`);
 
     return data;
@@ -115,15 +118,15 @@ export const fetchComments = createAsyncThunk<Comment[], Offer['id'], { extra: E
     return data;
   });
 
-export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { extra: Extra }>(
+export const fetchUserStatus = createAsyncThunk<User, undefined, { extra: Extra }>(
   Action.FETCH_USER_STATUS,
   async (_, { extra }) => {
     const { api } = extra;
 
     try {
-      const { data } = await api.get<User>(ApiRoute.Login);
+      const { data } = await api.get<UserDto>(ApiRoute.Login);
 
-      return data.email;
+      return adaptUserToClient(data);
     } catch (error) {
       const axiosError = error as AxiosError;
 
@@ -135,17 +138,17 @@ export const fetchUserStatus = createAsyncThunk<UserAuth['email'], undefined, { 
     }
   });
 
-export const loginUser = createAsyncThunk<UserAuth['email'], UserAuth, { extra: Extra }>(
+export const loginUser = createAsyncThunk<User, UserAuth, { extra: Extra }>(
   Action.LOGIN_USER,
   async ({ email, password }, { extra }) => {
     const { api, history } = extra;
-    const { data } = await api.post<User & { token: string }>(ApiRoute.Login, { email, password });
+    const { data } = await api.post<UserWithTokenDto>(ApiRoute.Login, { email, password });
     const { token } = data;
 
     Token.save(token);
     history.push(AppRoute.Root);
 
-    return email;
+    return adaptUserToClient(data);
   });
 
 export const logoutUser = createAsyncThunk<void, undefined, { extra: Extra }>(
@@ -170,7 +173,7 @@ export const registerUser = createAsyncThunk<void, UserRegister, { extra: Extra 
     if (avatar?.name) {
       const payload = new FormData();
       payload.append('avatar', avatar);
-      await api.post(`/${data.id}${ApiRoute.Avatar}`, payload, {
+      await api.post(`users/${data.id}${ApiRoute.Avatar}`, payload, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     }
