@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import { BaseController, HttpError, HttpMethod, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod, PrivateRouteMiddleware, UploadFileMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Component } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Response, Request } from 'express';
-import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUserRequest, UserRdo, UserService } from './index.js';
+import { CreateUserDto, CreateUserRequest, LoggedUserRdo, LoginUserDto, LoginUserRequest, UploadUserAvatarRdo, UserRdo, UserService } from './index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { fillDTO } from '../../helpers/common.js';
@@ -24,6 +24,7 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login, middlewares: [new ValidateDtoMiddleware(LoginUserDto)]});
     this.addRoute({ path: '/:userId/avatar', method: HttpMethod.Post, handler: this.uploadAvatar, middlewares: [new ValidateObjectIdMiddleware('userId'), new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar')]});
     this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.checkAuthenticate});
+    this.addRoute({ path: '/logout', method: HttpMethod.Delete, handler: this.logout, middlewares: [new PrivateRouteMiddleware()]});
   }
 
   public async create (
@@ -50,18 +51,16 @@ export class UserController extends BaseController {
   ): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
-      token
-    });
+    const responseData = fillDTO(LoggedUserRdo, user);
 
-    this.ok(res, responseData);
+    this.ok(res, Object.assign(responseData, {token}));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+  public async uploadAvatar({params, file}: Request, res: Response) {
+    const {userId} = params;
+    const uploadFile = {avatarPath: file?.filename};
+    await this.userService.updateById(userId, uploadFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, {filepath: uploadFile.avatarPath}));
   }
 
   public async checkAuthenticate({tokenPayload: {email}}: Request, res: Response) {
@@ -76,5 +75,13 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
+  }
+
+  public async logout(req: Request, res: Response): Promise<void> {
+    this.logger.info(`User logged out: ${req.tokenPayload?.email || 'unknown'}`);
+
+    this.ok(res, {
+      message: 'Logged out successfully'
+    });
   }
 }
